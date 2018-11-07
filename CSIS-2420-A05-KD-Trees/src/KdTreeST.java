@@ -38,7 +38,12 @@ public class KdTreeST<Value>
 	
 	private void put(Point2D p, Value val, Node n)
 	{
-		if (n.axisComparsion == X_AXIS)
+		if (n.p.x() == p.x() && n.p.y() == p.y())
+		{
+			n.val = val;
+		}
+		
+		else if (n.axisComparsion == X_AXIS)
 		{
 			if (n.p.x() > p.x())
 			{
@@ -61,6 +66,7 @@ public class KdTreeST<Value>
 				}
 			}
 		}
+		
 		else if (n.axisComparsion == Y_AXIS)
 		{
 			if (n.p.y() > p.y())
@@ -88,10 +94,7 @@ public class KdTreeST<Value>
 	   
 	public Value get(Point2D p)                 // value associated with point p 
 	{
-	
 		return get(p, start);
-		
-
 	}
 	
 	public Value get(Point2D p, Node n)
@@ -136,12 +139,63 @@ public class KdTreeST<Value>
 	   
 	public boolean contains(Point2D p)            // does the symbol table contain point p? 
 	{
-		return true;
+		return contains(p, start);
+	}
+	
+	private boolean contains(Point2D p, Node n)
+	{
+		if (n == null)
+		{
+			return false;
+		}
+
+		if (n.p.x() == p.x() && n.p.y() == p.y())
+		{
+			return true;
+		}
+
+		if (n.axisComparsion == X_AXIS)
+		{
+			if (n.p.x() > p.x())
+			{
+				return contains(p, n.lesser);
+			}
+			else 
+			{
+				return contains(p, n.greater);
+			}
+		}
+		
+		if (n.axisComparsion == Y_AXIS)
+		{
+			if (n.p.y() > p.y())
+			{
+				return contains(p, n.lesser);
+			}
+			else 
+			{
+				return contains(p, n.greater);
+			}
+		}
+		
+		return false;
 	}
 	   
 	public Iterable<Point2D> points()                       // all points in the symbol table 
 	{
-		return null;
+		Queue<Point2D> q = new Queue<Point2D>();
+		points(start, q);
+		return q;
+	}
+	
+	private void points(Node n, Queue<Point2D> q)
+	{
+		if (n != null)
+		{
+			points(n.lesser, q);
+			points(n.greater, q);
+			q.enqueue(n.p);
+		}
 	}
 	   
 	public Iterable<Point2D> range(RectHV rect)             // all points that are inside the rectangle 
@@ -177,12 +231,14 @@ public class KdTreeST<Value>
 		KdTreeST<Integer> st = new KdTreeST<Integer>();
 		st.put(new Point2D(0.0,0.0), 5);
 		st.put(new Point2D(1.1,1.1), 1);
-		st.put(new Point2D(2.2,2.2), 2);
+		st.put(new Point2D(-2.2,-2.2), 2);
 		st.put(new Point2D(3.3,3.3), 3);
+		st.put(new Point2D(3.3,3.3), 333);
 		st.put(new Point2D(4.4,4.4), 4);
 		
-		System.out.println(st.get(new Point2D(2.2,2.2)));
-		System.out.println(st.start.greater.greater.val);
+		System.out.println(st.get(new Point2D(3.3,3.3)));
+		System.out.println(st.contains(new Point2D(-2.2,-2.2)));
+		System.out.println(st.points());
 
 	}
 }
