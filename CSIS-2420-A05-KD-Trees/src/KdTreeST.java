@@ -257,7 +257,7 @@ public class KdTreeST<Value>
 	{
 		if (start != null) //Check if the table is not empty
 		{ 
-			return nearest(p, start, Double.NaN).p; //Start recursion
+			return nearest(p, start, null, new Ref<>(Double.NaN)).p; //Start recursion
 		}
 		else
 			return null;
@@ -270,78 +270,32 @@ public class KdTreeST<Value>
 	 * @param dist The maximum distance we will use when considering checking a box. if NaN, then base it off of the specified node. This is for optimization
 	 * @return The node closest to the point in this branch of the tree
 	 */
-	private Node nearest(Point2D p, Node n, double dist)
+	private Node nearest(Point2D p, Node n, Node closest, Ref<Double> dist)
 	{
 		//If we specified no distance, determine it from our node.
-		if (Double.isNaN(dist))
-			dist = n.p.distanceSquaredTo(p);
-		
-		//Our nearest node is the only one we've checked, which is N, we have not decided which we will check first.
-		Node nearest = n, first = n.lesser, second = n.greater;
-		
-		if (first != null && second != null)
+		double node_dist = n.p.distanceSquaredTo(p);
+		if (Double.isNaN(dist.value) || node_dist < dist.value)
 		{
-			if (!first.box.contains(p)) //If the greater node contains the point, check the greater one first instead of the lesser one
-			{
-				first = n.greater;
-				second = n.lesser;
-			}
-			
-			//Determine which node is closer, and set that as our nearest
-			nearest = check_nearest(nearest, first, p, nearest.p.distanceSquaredTo(p));
-			
-			//Recalculate the distance we care about.
-			dist = nearest.p.distanceSquaredTo(p);
-			
-			//If there's still still the possibility of a point being in the second rectangle, check it too
-			if (second.box.distanceSquaredTo(p) < dist)
-			{
-				nearest = check_nearest(nearest, second, p, dist);
-				dist = nearest.p.distanceSquaredTo(p);
-			}
-			
-			//Do not let our code escape this if statement, return the result immediately.
-			return nearest;
+			closest = n;
+			dist.value = node_dist;
 		}
 		
-		//Set up the nodes
-		first = n.lesser;
-		second = n.greater;
-		
-		//One or both of these nodes are null, if the first one is, move the second one up to first.
-		if (first == null)
+		//Greater first to satisfy the corner case of it being on the line
+		if (n.greater != null && n.greater.box.contains(p))
 		{
-			if (second != null)
-			{
-				first = second;
-			}
+			closest = nearest(p, n.greater, closest, dist);
+			if (n.lesser != null && n.lesser.box.distanceSquaredTo(p) < dist.value)
+				closest = nearest(p, n.lesser, closest, dist);
 		}
 		
-		//If we in fact have a node to check, determine which is closer and set that to the nearest.
-		if (first != null && first.box.distanceSquaredTo(p) < dist)
-			nearest = check_nearest(nearest, first, p, dist);
+		else if(n.lesser != null && n.lesser.box.contains(p))
+		{
+			closest = nearest(p, n.lesser, closest, dist);
+			if (n.greater != null && n.greater.box.distanceSquaredTo(p) < dist.value)
+				closest = nearest(p, n.greater, closest, dist);
+		}
 		
-		return nearest;
-	}
-	
-	/**
-	 * Determines if the second node contains a node closer to the point than the first node.
-	 * @param current The node to check against
-	 * @param check The node to traverse
-	 * @param p The point to find the closer node to
-	 * @param dist The maximum distance a region may be before we skip checking it, this is for optimization.
-	 * @return The node which is closest to the point.
-	 */
-	private Node check_nearest(Node current, Node check, Point2D p, double dist)
-	{
-		//Get the nearest node
-		check = nearest(p, check, dist);
-		
-		if (check.p.distanceSquaredTo(p) < dist) // If the node we found is closer, return it
-			return check;
-		
-		//Or else return the one we've been told is closest.
-		return current;
+		return closest;
 	}
 	
 //	public Point2D nearest(Point2D p) 
@@ -423,7 +377,7 @@ public class KdTreeST<Value>
 	
 	public static void main(String[] args)
 	{
-		String filename = "ftp://ftp.cs.princeton.edu/pub/cs226/kdtree/input1M.txt";
+		String filename = "ftp://ftp.cs.princeton.edu/pub/cs226/kdtree/input100K.txt";
         In in = new In(filename);
         
         KdTreeST<Integer> st = new KdTreeST<Integer>();
@@ -441,7 +395,7 @@ public class KdTreeST<Value>
         {
         	Point2D p = new Point2D(r.nextDouble(), r.nextDouble());
         	st.nearest(p);
-        	System.out.println(st.nearest(p));
+        	//System.out.println(st.nearest(p));
         }
         long fin = System.currentTimeMillis();
         double seconds = (fin - start)/ 1000.0;
