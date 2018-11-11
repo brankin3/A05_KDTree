@@ -5,6 +5,9 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
 
+/**
+ * @author Niles McNabb, Ethan Chaiko, Benjamin Rankin
+ */
 public class KdTreeST<Value>
 {
 	private static final boolean X_AXIS = true;
@@ -31,6 +34,9 @@ public class KdTreeST<Value>
 	 // associate the value val with point p
 	public void put(Point2D p, Value val)     
 	{
+		if (p == null || val == null)
+			throw new NullPointerException();
+		
 		if (start == null) //Base case: tree is empty
 		{
 			start = new Node(p, val, X_AXIS); //Set start to a new node with the specified values
@@ -101,10 +107,13 @@ public class KdTreeST<Value>
 	// value associated with point p 
 	public Value get(Point2D p)                 
 	{
+		if (p == null)
+			throw new NullPointerException();
+		
 		return get(p, start); //Start recursion
 	}
 	
-	public Value get(Point2D p, Node n)
+	private Value get(Point2D p, Node n)
 	{
 		if (n == null) //Base case: no match found
 		{
@@ -146,6 +155,9 @@ public class KdTreeST<Value>
 	// does the symbol table contain point p?   
 	public boolean contains(Point2D p)            
 	{
+		if (p == null)
+			throw new NullPointerException();
+		
 		return contains(p, start); //Start recursion
 	}
 	
@@ -209,6 +221,9 @@ public class KdTreeST<Value>
 	   
 	public Iterable<Point2D> range(RectHV rect)             // all points that are inside the rectangle 
 	{
+		if (rect == null)
+			throw new NullPointerException();
+		
 		Queue<Point2D> q = new Queue<Point2D>();  //Initialize queue
 		range(rect, start, q); //Start recursion
 		return q; //Return queue
@@ -229,10 +244,7 @@ public class KdTreeST<Value>
 				{
 					range(rect, n.greater, q); //Check greater subtree
 				}
-				if (rect.contains(n.p)) //Check if current node is within the rectangle
-				{
-					q.enqueue(n.p); //Add the current node's point to the queue
-				}
+				
 			}
 			if (n.axisComparsion == Y_AXIS) //Check if current node uses Y axis 
 			{
@@ -244,16 +256,19 @@ public class KdTreeST<Value>
 				{
 					range(rect, n.greater, q); //Check greater subtree
 				}
-				if (rect.contains(n.p)) //Check if current node is within the rectangle
-				{
-					q.enqueue(n.p); //Add the current node's point to the queue
-				}
+			}
+			if (rect.contains(n.p)) //Check if current node is within the rectangle
+			{
+				q.enqueue(n.p); //Add the current node's point to the queue
 			}
 		}
  	}
 	   
 	public Point2D nearest(Point2D p) 
 	{
+		if (p == null)
+			throw new NullPointerException();
+		
 		if (start != null) //Check if the table is not empty
 		{ 
 			return nearest(p, start.p, start); //Start recursion
