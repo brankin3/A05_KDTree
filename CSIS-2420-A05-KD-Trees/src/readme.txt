@@ -25,14 +25,16 @@ and references to the left and right subtrees.
  *  Describe your method for range search in a kd-tree.
  *****************************************************************************/
 We check if the rectangle intersects with the rectangle left, right, above or below the current node
-, and check the subtrees associated with each range. If a node is within the rectangle its added to the queue.
+and check the subtrees associated with each rectangle that intersects. If a node is within the rectangle 
+its added to the queue.
 
 /******************************************************************************
  *  Describe your method for nearest neighbor search in a kd-tree.
  *****************************************************************************/
 We check if the point is less than the current node, and if it is we check its left subtree,
 else we check the right subtree, and this method is called recursively until we reach the bottom
-of the tree and return the closest point.
+of the tree and return the closest point. We also prune subtrees from the search if it is impossible 
+for the nearest point to be in the subtree's rectangle.
 
 /******************************************************************************
  *  How many nearest neighbor calculations can your brute-force
@@ -57,7 +59,7 @@ input1M.txt             30                    567,794
 /******************************************************************************
  *  Known bugs / limitations.
  *****************************************************************************/
-
+No known bugs or limitations.
 
 /******************************************************************************
  *  Describe whatever help (if any) that you received.
