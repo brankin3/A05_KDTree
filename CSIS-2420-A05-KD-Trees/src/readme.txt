@@ -50,9 +50,9 @@ for the nearest point to be in the subtree's rectangle.
                        calls to nearest() per second
                      brute force               2d-tree
                      ---------------------------------
-input100K.txt           439                   1,226,993
+input100K.txt           439                   1,210,360
 
-input1M.txt             30                    567,794
+input1M.txt             30                    673,128
 
 
 
