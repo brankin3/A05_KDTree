@@ -94,7 +94,7 @@ public class PointST<Value>
 	
 	public static void main(String[] args)
 	{
-		String filename = "C:\\TestDocs\\input1M.txt";
+		String filename = "ftp://ftp.cs.princeton.edu/pub/cs226/kdtree/input1M.txt";
         In in = new In(filename);
         
         PointST<Integer> st = new PointST<Integer>();

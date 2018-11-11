@@ -1,9 +1,9 @@
 import java.util.Random;
 
 import edu.princeton.cs.algs4.In;
-//import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
-//import edu.princeton.cs.algs4.RectHV;
+import edu.princeton.cs.algs4.RectHV;
 
 public class KdTreeST<Value>
 {
@@ -377,7 +377,7 @@ public class KdTreeST<Value>
 	
 	public static void main(String[] args)
 	{
-		String filename = "ftp://ftp.cs.princeton.edu/pub/cs226/kdtree/input100K.txt";
+		String filename = "ftp://ftp.cs.princeton.edu/pub/cs226/kdtree/input1M.txt";
         In in = new In(filename);
         
         KdTreeST<Integer> st = new KdTreeST<Integer>();
