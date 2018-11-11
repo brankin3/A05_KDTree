@@ -238,11 +238,13 @@ public class KdTreeST<Value>
 			{
 				if (n.p.x() > rect.xmin()) //Check if specified rectangle intersects with the rectangle left of the current node
 				{
-					range(rect, n.lesser , q); //Check lesser subtree
+					if (n.lesser != null)
+						range(rect, n.lesser , q); //Check lesser subtree
 				}
 				if (n.p.x() <= rect.xmax()) //Check if specified rectangle intersects with the rectangle right of the current node
 				{
-					range(rect, n.greater, q); //Check greater subtree
+					if (n.greater != null)
+						range(rect, n.greater, q); //Check greater subtree
 				}
 				
 			}
@@ -250,11 +252,13 @@ public class KdTreeST<Value>
 			{
 				if (n.p.y() > rect.ymin()) //Check if specified rectangle intersects with the rectangle above the current node
 				{
-					range(rect, n.lesser , q); //Check lesser subtree
+					if (n.lesser != null)
+						range(rect, n.lesser , q); //Check lesser subtree
 				}
 				if (n.p.y() <= rect.ymax()) //Check if specified rectangle intersects with the rectangle below the current node
 				{
-					range(rect, n.greater, q); //Check greater subtree
+					if (n.greater != null)
+						range(rect, n.greater, q); //Check greater subtree
 				}
 			}
 			if (rect.contains(n.p)) //Check if current node is within the rectangle
@@ -285,34 +289,42 @@ public class KdTreeST<Value>
 			{
 				if (n.p.x() > p.x()) //If specified point is less than the current node
 				{
-					near = nearest(p, near, n.lesser); //Check lesser subtree for the nearest point
+					if (n.lesser != null)
+						near = nearest(p, near, n.lesser); //Check lesser subtree for the nearest point
 					                                                                //If the distance to rectangle right of the current node 
 					if (Math.pow((n.p.x() - p.x()), 2) < near.distanceSquaredTo(p)) //less than distance to the current nearest point
-						near = nearest(p, near, n.greater); //Check the greater subtree for the nearest point                     
+						if (n.greater != null)
+							near = nearest(p, near, n.greater); //Check the greater subtree for the nearest point                     
 				}                                                                                  
 				else 
 				{
-					near = nearest(p, near, n.greater); //Check the greater subtree for the nearest point      
+					if (n.greater != null)
+						near = nearest(p, near, n.greater); //Check the greater subtree for the nearest point      
 					                                                                //If the distance to rectangle left of the current node 
 					if (Math.pow((n.p.x() - p.x()), 2) < near.distanceSquaredTo(p)) //less than distance to the current nearest point
-						near = nearest(p, near, n.lesser); //Check the lesser subtree for the nearest point  
+						if (n.lesser != null)
+							near = nearest(p, near, n.lesser); //Check the lesser subtree for the nearest point  
 				}
 			}
 			else if (n.axisComparsion == Y_AXIS) //Check if current node uses Y axis 
 			{
 				if (n.p.y() > p.y()) //If specified point is less than the current node
 				{
-					near = nearest(p, near, n.lesser); //Check lesser subtree for the nearest point
+					if (n.lesser != null)
+						near = nearest(p, near, n.lesser); //Check lesser subtree for the nearest point
 					                                                                //If the distance to rectangle above the current node 
 					if (Math.pow((n.p.y() - p.y()), 2) < near.distanceSquaredTo(p)) //less than distance to the current nearest point
-						near = nearest(p, near, n.greater); //Check the greater subtree for the nearest point  
+						if (n.greater != null)
+							near = nearest(p, near, n.greater); //Check the greater subtree for the nearest point  
 				}
 				else 
 				{
-					near = nearest(p, near, n.greater); //Check the greater subtree for the nearest point  
+					if (n.greater != null)
+						near = nearest(p, near, n.greater); //Check the greater subtree for the nearest point  
 					                                                                //If the distance to rectangle below the current node 
 					if (Math.pow((n.p.y() - p.y()), 2) < near.distanceSquaredTo(p)) //less than distance to the current nearest point
-						near = nearest(p, near, n.lesser); //Check lesser subtree for the nearest point
+						if (n.lesser != null)
+							near = nearest(p, near, n.lesser); //Check lesser subtree for the nearest point
 				}
 			}
 			
