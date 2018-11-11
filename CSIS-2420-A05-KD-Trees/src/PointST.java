@@ -31,18 +31,27 @@ public class PointST<Value>
 	 // associate the value val with point p
 	public void put(Point2D p, Value val)     
 	{
+		if (p == null || val == null)
+			throw new NullPointerException();
+		
 		st.put(p, val);
 	}
 	
 	// value associated with point p 
 	public Value get(Point2D p)                 
 	{
+		if (p == null)
+			throw new NullPointerException();
+		
 		return st.get(p);
 	}
 	 
 	// does the symbol table contain point p? 
 	public boolean contains(Point2D p)            
 	{
+		if (p == null)
+			throw new NullPointerException();
+		
 		return st.contains(p);
 	}
 	   
@@ -55,6 +64,9 @@ public class PointST<Value>
 	// all points that are inside the rectangle 
 	public Iterable<Point2D> range(RectHV rect)             
 	{
+		if (rect == null)
+			throw new NullPointerException();
+		
 		Queue<Point2D> q = new Queue<Point2D>();
 		
 		for (Point2D p : st.keys()) //Iterate through all points in the table
@@ -71,6 +83,9 @@ public class PointST<Value>
 	// a nearest neighbor to point p; null if the symbol table is empty 
 	public Point2D nearest(Point2D p) 
 	{
+		if (p == null)
+			throw new NullPointerException();
+		
 		Point2D nearest = null;
 		Double n = null;
 		
