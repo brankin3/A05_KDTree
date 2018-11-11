@@ -6,6 +6,9 @@ import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.RedBlackBST;
 
+/**
+ * @author Niles McNabb, Ethan Chaiko, Benjamin Rankin
+ */
 public class PointST<Value>
 {
 	private RedBlackBST<Point2D, Value> st; //Red Black BST to hold 2D point and values
