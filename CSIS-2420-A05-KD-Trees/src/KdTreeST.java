@@ -5,6 +5,9 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
 
+/**
+ * @author Niles McNabb, Ethan Chaiko, Benjamin Rankin
+ */
 public class KdTreeST<Value>
 {
 	private static final boolean X_AXIS = true;
